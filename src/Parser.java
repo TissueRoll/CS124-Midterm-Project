@@ -16,6 +16,11 @@ public class Parser
 {
 	private String dataFile;
 	
+	/*
+	 * constructor
+	 * calls add listener and passes each .*Processor class
+	 * -- maybe use fastclasspathscanner? idk
+	 */
 	public Parser(String file)
 	{
 		dataFile = file;
@@ -32,6 +37,11 @@ public class Parser
 		
 	}
 	
+	/*
+	 * if the object is an instance of a listener, add it with its corresponding add function
+	 * > actually just adds it to an arraylist
+	 * -- maybe possible to use fastclasspathscanner but maybe need something a bit more complicated (something like an interceptor)
+	 */
 	public void addListener(Object o)
 	{
 		if (o instanceof ModelListener)
@@ -52,6 +62,11 @@ public class Parser
 		}
 	}
 	
+	/*
+	 * parses the input file according to label
+	 * calls corresponding method for label
+	 * each method call is similar but has something different each time; might be optimizable
+	 */
 	public void parse() throws Exception
 	{
 		// read line
