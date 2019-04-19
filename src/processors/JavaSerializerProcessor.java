@@ -11,7 +11,9 @@ import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
+import annotations.Processor;
 
+@Processor(target= {ModelListener.class,FragmentListener.class,FieldListener.class,LabelListener.class})
 public class JavaSerializerProcessor implements ModelListener, FragmentListener, FieldListener , LabelListener{
 
 	String modelName;

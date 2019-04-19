@@ -12,8 +12,11 @@ import org.apache.commons.io.FileUtils;
 
 import listeners.FieldListener;
 import listeners.FragmentListener;
+import listeners.LabelListener;
 import listeners.ModelListener;
+import annotations.Processor;
 
+@Processor(target= {ModelListener.class,FragmentListener.class,FieldListener.class})
 public class JavaValidatorProcessor implements ModelListener, FragmentListener, FieldListener {
 
 	String modelName;

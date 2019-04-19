@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import annotations.Processor;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
@@ -21,19 +24,14 @@ public class Parser
 	 * calls add listener and passes each .*Processor class
 	 * -- maybe use fastclasspathscanner? idk
 	 */
-	public Parser(String file)
+	public Parser(String file) throws Exception
 	{
 		dataFile = file;
-		
-		// pojo java file generator
-		PojoProcessor pojoProcessor = new PojoProcessor();
-		addListener(pojoProcessor);		
-		
-
-		addListener(new JavaValidatorProcessor());
-		addListener(new JavaSerializerProcessor());
-
-		addListener(new JsonTemplateProcessor());
+		ScanResult processors = new FastClasspathScanner("processors").scan();
+		List<String> allProcessors = processors.getNamesOfClassesWithAnnotation("annotations.Processor");
+		for (String s : allProcessors) {
+			addListener(Class.forName(s).newInstance());
+		}
 		
 	}
 	
@@ -44,6 +42,7 @@ public class Parser
 	 */
 	public void addListener(Object o)
 	{
+		
 		if (o instanceof ModelListener)
 		{
 			addModelListener((ModelListener) o);
@@ -113,6 +112,7 @@ public class Parser
 					continue;
 				}
 				
+				// basically replace this if else chain with some mechanism to determine new<type>Created();
 				if (line.startsWith("MODEL"))
 				{
 					newModelCreated(line);
