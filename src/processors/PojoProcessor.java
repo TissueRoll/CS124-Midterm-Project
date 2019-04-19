@@ -35,6 +35,7 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		// TODO Auto-generated method stub
 		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
 		
+		// have to optimize this
 		if (type.startsWith("LIST:"))
 		{
 			String[] listData = type.split(":");

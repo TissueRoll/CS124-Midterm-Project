@@ -35,6 +35,7 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 		
 		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
 		
+		// have to optimize this
 		if (type.startsWith("MULTI:"))
 		{
 			String[] multiData = type.split(":");

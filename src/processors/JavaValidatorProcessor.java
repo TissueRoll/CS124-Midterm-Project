@@ -112,7 +112,7 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 
 		String dependencyCheck = createDependencyCheck(javaFieldName, type, misc);
 		
-		
+		// have to optimize this
 		if (type.startsWith("MULTI:"))
 		{
 			String[] multiData = type.split(":");

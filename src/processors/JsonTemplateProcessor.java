@@ -86,7 +86,7 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 			return;
 		}
 		
-
+		// have to optimize this
 		if (type.startsWith("MULTI:"))
 		{
 			String[] multiData = type.split(":");

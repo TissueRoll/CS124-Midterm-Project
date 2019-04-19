@@ -1,4 +1,5 @@
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -32,7 +33,6 @@ public class Parser
 		for (String s : allProcessors) {
 			addListener(Class.forName(s).newInstance());
 		}
-		
 	}
 	
 	/*
@@ -42,7 +42,7 @@ public class Parser
 	 */
 	public void addListener(Object o)
 	{
-		
+		// add<TYPE>Listener(<TYPE> o);
 		if (o instanceof ModelListener)
 		{
 			addModelListener((ModelListener) o);
@@ -101,18 +101,20 @@ public class Parser
 		{
 			String line = scanner.nextLine().trim();
 			try {
-				if (line.trim().isEmpty())
+				if (line.trim().isEmpty()) // keep
 				{
 					continue;
 				}
 				
-				if (line.startsWith("#"))
+				if (line.startsWith("#")) // keep
 				{
 					// comment, ignore
 					continue;
 				}
 				
 				// basically replace this if else chain with some mechanism to determine new<type>Created();
+				// we can probably use reflection to find stuff with method names as new.*Created
+				// everything is just new<TYPE>Created(line) so maybe theres a way to do this
 				if (line.startsWith("MODEL"))
 				{
 					newModelCreated(line);
@@ -145,7 +147,7 @@ public class Parser
 		}
 	}
 	
-	
+	// slightly different from the others
 	private List<FieldListener> fieldListeners = new ArrayList<>();
 	
 	public void addFieldListener(FieldListener fl)
@@ -167,7 +169,8 @@ public class Parser
 			fl.fieldCreated(data[0].trim(), data[1].trim(), data.length>2 ? data[2].trim() : null);
 		}
 	}
-
+	
+	// fragment, model, label are all the same functions
 	private List<FragmentListener> fragmentListeners = new ArrayList<>();
 	
 	public void addFragmentListener(FragmentListener fl)
