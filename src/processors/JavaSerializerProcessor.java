@@ -11,6 +11,7 @@ import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
+import processors.fieldCreatedExtension.MultiUtil;
 import annotations.Processor;
 
 @Processor(target= {ModelListener.class,FragmentListener.class,FieldListener.class,LabelListener.class})
@@ -38,24 +39,25 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 		// have to optimize this
 		if (type.startsWith("MULTI:"))
 		{
-			String[] multiData = type.split(":");
-			String optionString = multiData[1].substring(1, multiData[1].length()-1);
-			String[] options = optionString.split(",");			
-
-			for (int i=0; i<options.length; i++)
-			{
-				String name = (String) options[i];
-
-				if (name.toLowerCase().contains("(specify)"))
-				{
-					addSerialization(javaFieldName+"Others");
-					addSerialization(javaFieldName+"Specify");				
-				}
-				else
-				{
-					addSerialization(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()));
-				}
-			}
+			new MultiUtil(fieldName, type, misc, this).JavaSerializerProcessorCommand();
+//			String[] multiData = type.split(":");
+//			String optionString = multiData[1].substring(1, multiData[1].length()-1);
+//			String[] options = optionString.split(",");			
+//
+//			for (int i=0; i<options.length; i++)
+//			{
+//				String name = (String) options[i];
+//
+//				if (name.toLowerCase().contains("(specify)"))
+//				{
+//					addSerialization(javaFieldName+"Others");
+//					addSerialization(javaFieldName+"Specify");				
+//				}
+//				else
+//				{
+//					addSerialization(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()));
+//				}
+//			}
 
 		}
 		else if (type.startsWith("SINGLE:"))
