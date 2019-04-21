@@ -16,6 +16,7 @@ import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
 import processors.fieldCreatedExtension.ProcessorsImplement;
+import processors.fieldCreatedExtension.ReusableMethods;
 
 @RefersTo(target= {ModelListener.class,FragmentListener.class,FieldListener.class,LabelListener.class})
 public class JavaSerializerProcessor implements ModelListener, FragmentListener, FieldListener , LabelListener{
@@ -36,36 +37,10 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 	@Override
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
-		
-		ScanResult results = new FastClasspathScanner("processors.fieldCreatedExtension").scan();
-		List<String> allResults = results.getNamesOfClassesWithAnnotation(FieldCreatedIdentifier.class);
-		boolean matched = false;
-		for (String s : allResults) {
-			Class c = Class.forName(s);
-			RefersTo rt = (RefersTo) c.getAnnotation(RefersTo.class);
-			boolean isReferred = false;
-			for (Class referredClass : rt.target()) {
-				if (this.getClass().equals(referredClass)) {
-					isReferred = true;
-				}
-			}
-			if (!isReferred) {
-				continue;
-			}
-			FieldCreatedIdentifier fci = (FieldCreatedIdentifier) c.getAnnotation(FieldCreatedIdentifier.class);
-			if (type.startsWith(fci.identifier())) {
-				matched = true;
-				ProcessorsImplement thing = (ProcessorsImplement) c.newInstance();
-				thing.passInfo(fieldName, type, misc, this);
-				thing.JavaSerializerProcessorCommand();
-			}
-		}
-		if (!matched) {
-			ProcessorsImplement thing = (ProcessorsImplement) Class.forName("processors.fieldCreatedExtension.OtherUtil").newInstance();
-			thing.passInfo(fieldName, type, misc, this);
-			thing.JavaSerializerProcessorCommand();
-		}	
-		
+		ReusableMethods rm = new ReusableMethods();
+		ProcessorsImplement thing = (ProcessorsImplement) rm.getMethodForThisClass(fieldName, type, misc, this);
+		thing.passInfo(fieldName, type, misc, this);
+		thing.JavaSerializerProcessorCommand();	
 	}
 
 
@@ -77,7 +52,6 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 	
 	public void addSerializeCall(String name)
 	{
-//		System.out.println("\t\tserialize"+NameUtils.upcaseFirst(name)+"(model, object, context); // "+NameUtils.javaFieldNameToJson(name));
 		callBuffer.append("\t\tserialize"+NameUtils.upcaseFirst(name)+"(model, object, context); // "+NameUtils.javaFieldNameToJson(name)+"\n");
 	}
 	

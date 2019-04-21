@@ -14,6 +14,7 @@ import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
 import processors.fieldCreatedExtension.ProcessorsImplement;
+import processors.fieldCreatedExtension.ReusableMethods;
 import annotations.FieldCreatedIdentifier;
 import annotations.RefersTo;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
@@ -92,33 +93,10 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		}
 		
 		ScanResult results = new FastClasspathScanner("processors.fieldCreatedExtension").scan();
-		List<String> allResults = results.getNamesOfClassesWithAnnotation(FieldCreatedIdentifier.class);
-		boolean matched = false;
-		for (String s : allResults) {
-			Class c = Class.forName(s);
-			RefersTo rt = (RefersTo) c.getAnnotation(RefersTo.class);
-			boolean isReferred = false;
-			for (Class referredClass : rt.target()) {
-				if (this.getClass().equals(referredClass)) {
-					isReferred = true;
-				}
-			}
-			if (!isReferred) {
-				continue;
-			}
-			FieldCreatedIdentifier fci = (FieldCreatedIdentifier) c.getAnnotation(FieldCreatedIdentifier.class);
-			if (type.startsWith(fci.identifier())) {
-				matched = true;
-				ProcessorsImplement thing = (ProcessorsImplement) c.newInstance();
-				thing.passInfo(fieldName, type, misc, this);
-				thing.JsonTemplateProcessorCommand();
-			}
-		}
-		if (!matched) {
-			ProcessorsImplement thing = (ProcessorsImplement) Class.forName("processors.fieldCreatedExtension.OtherUtil").newInstance();
-			thing.passInfo(fieldName, type, misc, this);
-			thing.JsonTemplateProcessorCommand();
-		}
+		ReusableMethods rm = new ReusableMethods();
+		ProcessorsImplement thing = (ProcessorsImplement) rm.getMethodForThisClass(fieldName, type, misc, this);
+		thing.passInfo(fieldName, type, misc, this);
+		thing.JsonTemplateProcessorCommand();	
 	}
 	
 	/* CHANGE */
