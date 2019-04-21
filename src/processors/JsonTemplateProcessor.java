@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -12,7 +13,11 @@ import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
+import processors.fieldCreatedExtension.ProcessorsImplement;
+import annotations.FieldCreatedIdentifier;
 import annotations.RefersTo;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 
 @RefersTo(target= {ModelListener.class,FragmentListener.class,FieldListener.class})
 public class JsonTemplateProcessor implements ModelListener, FragmentListener, FieldListener {
@@ -78,8 +83,6 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 	@Override
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
-		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
-
 		
 		// check if the field is a meant for custom runtime serialization
 			// if it is, nothing is added at this point, just skip
@@ -88,60 +91,34 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 			return;
 		}
 		
-		// have to optimize this
-		if (type.startsWith("MULTI:"))
-		{
-			String[] multiData = type.split(":");
-			String optionString = multiData[1].substring(1, multiData[1].length()-1);
-			String[] options = optionString.split(",");
-			for (String name : options)
-			{
-				if (name.toLowerCase().contains("(specify)"))
-				{
-					addSimpleField(javaFieldName+"Others", "CHECKBOX");
-					addSimpleField(javaFieldName+"Specify", "STRING");				
-				}
-				else
-				{
-					addSimpleField(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()), "CHECKBOX");
+		ScanResult results = new FastClasspathScanner("processors.fieldCreatedExtension").scan();
+		List<String> allResults = results.getNamesOfClassesWithAnnotation(FieldCreatedIdentifier.class);
+		boolean matched = false;
+		for (String s : allResults) {
+			Class c = Class.forName(s);
+			RefersTo rt = (RefersTo) c.getAnnotation(RefersTo.class);
+			boolean isReferred = false;
+			for (Class referredClass : rt.target()) {
+				if (this.getClass().equals(referredClass)) {
+					isReferred = true;
 				}
 			}
-
-		}
-		else if (type.startsWith("SINGLE:"))
-		{
-			addSimpleField(javaFieldName, type);
-			
-			// NEED TO LOOP ENTRIES to tie the specify
-			String[] singleData = type.split(":");
-			String optionString = singleData[1].substring(1, singleData[1].length()-1);
-			String[] options = optionString.split(",");
-			for (int i=0; i< options.length; i++)
-			{
-				String option = options[i];
-				if (option.toLowerCase().contains("(specify"))
-				{
-					addSimpleField(javaFieldName+"Specify", "STRING");				
-					break;  // assume only one Specify field per group
-				}					
+			if (!isReferred) {
+				continue;
 			}
-			
-		}
-		else
-		{
-			boolean addSpecifyField = false;
-			if (type.equals("CHECKBOX:SPECIFY"))
-			{
-				addSpecifyField = true;
+			FieldCreatedIdentifier fci = (FieldCreatedIdentifier) c.getAnnotation(FieldCreatedIdentifier.class);
+			if (type.startsWith(fci.identifier())) {
+				matched = true;
+				ProcessorsImplement thing = (ProcessorsImplement) c.newInstance();
+				thing.passInfo(fieldName, type, misc, this);
+				thing.JsonTemplateProcessorCommand();
 			}
-					
-			addSimpleField(javaFieldName, type);
-			
-			if (addSpecifyField)
-			{
-				addSimpleField(javaFieldName+"Specify", "STRING");				
-			}		
-		}	
+		}
+		if (!matched) {
+			ProcessorsImplement thing = (ProcessorsImplement) Class.forName("processors.fieldCreatedExtension.OtherUtil").newInstance();
+			thing.passInfo(fieldName, type, misc, this);
+			thing.JsonTemplateProcessorCommand();
+		}
 	}
 	
 	/* CHANGE */

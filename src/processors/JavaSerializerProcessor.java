@@ -64,67 +64,7 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 			ProcessorsImplement thing = (ProcessorsImplement) Class.forName("processors.fieldCreatedExtension.OtherUtil").newInstance();
 			thing.passInfo(fieldName, type, misc, this);
 			thing.JavaSerializerProcessorCommand();
-		}
-		
-		
-//		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
-//
-//		if (type.startsWith("MULTI:"))
-//		{
-//			String[] multiData = type.split(":");
-//			String optionString = multiData[1].substring(1, multiData[1].length()-1);
-//			String[] options = optionString.split(",");			
-//
-//			for (int i=0; i<options.length; i++)
-//			{
-//				String name = (String) options[i];
-//
-//				if (name.toLowerCase().contains("(specify)"))
-//				{
-//					addSerialization(javaFieldName+"Others");
-//					addSerialization(javaFieldName+"Specify");				
-//				}
-//				else
-//				{
-//					addSerialization(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()));
-//				}
-//			}
-//
-//		}
-//		else if (type.startsWith("SINGLE:"))
-//		{
-//			addSerialization(javaFieldName);
-//			
-//			// NEED TO LOOP ENTRIES to tie the specify
-//			String[] singleData = type.split(":");
-//			String optionString = singleData[1].substring(1, singleData[1].length()-1);
-//			String[] options = optionString.split(",");
-//			for (int i=0; i< options.length; i++)
-//			{
-//				String option = options[i];
-//				if (option.toLowerCase().contains("(specify"))
-//				{
-//					addSerialization(javaFieldName+"Specify");				
-//					break;  // assume only one Specify field per group
-//				}					
-//			}
-//			
-//		}
-//		else
-//		{
-//			boolean addSpecifyField = false;
-//			if (type.equals("CHECKBOX:SPECIFY"))
-//			{
-//				addSpecifyField = true;
-//			}
-//					
-//			addSerialization(javaFieldName);
-//			
-//			if (addSpecifyField)
-//			{
-//				addSerialization(javaFieldName+"Specify");				
-//			}		
-//		}		
+		}	
 		
 	}
 

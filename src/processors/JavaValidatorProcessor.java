@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -14,7 +15,11 @@ import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
+import processors.fieldCreatedExtension.ProcessorsImplement;
+import annotations.FieldCreatedIdentifier;
 import annotations.RefersTo;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 
 @RefersTo(target= {ModelListener.class,FragmentListener.class,FieldListener.class})
 public class JavaValidatorProcessor implements ModelListener, FragmentListener, FieldListener {
@@ -99,77 +104,43 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
 		
-		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
-		
-		
 		if (ParseUtils.hasMisc("OPTIONAL", misc))
 		{
 			validationCallBuffer.append("\t\t//  ");
-			validationCallBuffer.append(javaFieldName+" optional");
+			validationCallBuffer.append(ParseUtils.extractJavaFieldName(fieldName, misc)+" optional");
 			validationCallBuffer.append("\n");
 			return;
 		}
-
-		String dependencyCheck = createDependencyCheck(javaFieldName, type, misc);
 		
-		// have to optimize this
-		if (type.startsWith("MULTI:"))
-		{
-			String[] multiData = type.split(":");
-			String optionString = multiData[1].substring(1, multiData[1].length()-1);
-			String[] options = optionString.split(",");
-
-			for (int i=0; i<options.length; i++)
-			{
-				String name = (String) options[i];
-
-
-				if (name.toLowerCase().contains("(specify)"))
-				{
-					addValidation(javaFieldName+"Others", dependencyCheck, NameUtils.stripRadioAlias(name));
-					addSpecifyValidation(javaFieldName+"Specify", javaFieldName+"Others", 1, NameUtils.stripRadioAlias(name), dependencyCheck);				
-				}
-				else
-				{
-					addValidation(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()), dependencyCheck, NameUtils.stripRadioAlias(name));
+		ScanResult results = new FastClasspathScanner("processors.fieldCreatedExtension").scan();
+		List<String> allResults = results.getNamesOfClassesWithAnnotation(FieldCreatedIdentifier.class);
+		boolean matched = false;
+		for (String s : allResults) {
+			Class c = Class.forName(s);
+			RefersTo rt = (RefersTo) c.getAnnotation(RefersTo.class);
+			boolean isReferred = false;
+			for (Class referredClass : rt.target()) {
+				if (this.getClass().equals(referredClass)) {
+					isReferred = true;
 				}
 			}
-
-		}
-		else if (type.startsWith("SINGLE:"))
-		{
-			addValidation(javaFieldName, dependencyCheck, fieldName);
-			
-			// NEED TO LOOP ENTRIES to tie the specify
-			String[] singleData = type.split(":");
-			String optionString = singleData[1].substring(1, singleData[1].length()-1);
-			String[] options = optionString.split(",");
-			for (int i=0; i< options.length; i++)
-			{
-				String option = options[i];
-				if (option.toLowerCase().contains("(specify"))
-				{
-					addSpecifyValidation(javaFieldName+"Specify", javaFieldName, i, fieldName+" "+option, dependencyCheck);				
-					break;  // assume only one Specify field per group
-				}					
+			if (!isReferred) {
+				continue;
 			}
-			
-		}
-		else
-		{
-			boolean addSpecifyField = false;
-			if (type.equals("CHECKBOX:SPECIFY"))
-			{
-				addSpecifyField = true;
+			FieldCreatedIdentifier fci = (FieldCreatedIdentifier) c.getAnnotation(FieldCreatedIdentifier.class);
+			if (type.startsWith(fci.identifier())) {
+				matched = true;
+				ProcessorsImplement thing = (ProcessorsImplement) c.newInstance();
+				thing.passInfo(fieldName, type, misc, this);
+				thing.JavaValidatorProcessorCommand();
 			}
-					
-			addValidation(javaFieldName, dependencyCheck, fieldName);
+		}
+		if (!matched) {
+			ProcessorsImplement thing = (ProcessorsImplement) Class.forName("processors.fieldCreatedExtension.OtherUtil").newInstance();
+			thing.passInfo(fieldName, type, misc, this);
+			thing.JavaValidatorProcessorCommand();
+		}
 			
-			if (addSpecifyField)
-			{
-				addSpecifyValidation(javaFieldName+"Specify", javaFieldName, 1, fieldName+" Specify", dependencyCheck);				
-			}		
-		}		
 	}
 
 

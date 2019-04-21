@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -11,7 +12,11 @@ import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
+import processors.fieldCreatedExtension.ProcessorsImplement;
+import annotations.FieldCreatedIdentifier;
 import annotations.RefersTo;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 
 @RefersTo(target= {ModelListener.class,FragmentListener.class,FieldListener.class})
 public class PojoProcessor implements ModelListener, FragmentListener, FieldListener {
@@ -33,61 +38,33 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 	@Override
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
-		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
-		
-		// have to optimize this
-		if (type.startsWith("LIST:"))
-		{
-			String[] listData = type.split(":");
-			addUnmappedRealmList(javaFieldName, "io.realm.RealmList<"+listData[1]+">",listData[1], "new io.realm.RealmList<"+listData[1]+">()");		
-		}
-		else if (type.startsWith("MULTI:"))
-		{
-			String[] multiData = type.split(":");
-			String optionString = multiData[1].substring(1, multiData[1].length()-1);
-			String[] options = optionString.split(",");
-			
-			for (int i=0; i<options.length; i++)
-			{
-				String name = (String) options[i];
-				String javaType = "Integer";
-				
-				if (name.contains("(specify)".toLowerCase()))
-				{
-					addField(javaFieldName+"Others", javaType);
-					addField(javaFieldName+"Specify", "String");
-				}
-				else
-				{
-					addField(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()), javaType);
+		ScanResult results = new FastClasspathScanner("processors.fieldCreatedExtension").scan();
+		List<String> allResults = results.getNamesOfClassesWithAnnotation(FieldCreatedIdentifier.class);
+		boolean matched = false;
+		for (String s : allResults) {
+			Class c = Class.forName(s);
+			RefersTo rt = (RefersTo) c.getAnnotation(RefersTo.class);
+			boolean isReferred = false;
+			for (Class referredClass : rt.target()) {
+				if (this.getClass().equals(referredClass)) {
+					isReferred = true;
 				}
 			}
-		}
-		else if (type.startsWith("SINGLE:"))
-		{
-			String javaType = TypeUtils.getPojoType(type);
-			addField(javaFieldName, javaType);
-			if (type.contains("(Specify".toLowerCase()))
-			{
-				addField(javaFieldName+"Specify", "String");
+			if (!isReferred) {
+				continue;
+			}
+			FieldCreatedIdentifier fci = (FieldCreatedIdentifier) c.getAnnotation(FieldCreatedIdentifier.class);
+			if (type.startsWith(fci.identifier())) {
+				matched = true;
+				ProcessorsImplement thing = (ProcessorsImplement) c.newInstance();
+				thing.passInfo(fieldName, type, misc, this);
+				thing.PojoProcessorCommand();
 			}
 		}
-		else	
-		{
-			String javaType = TypeUtils.getPojoType(type);
-			
-			boolean addSpecifyField = false;
-			if (type.equals("CHECKBOX:SPECIFY"))
-			{
-				addSpecifyField = true;
-			}
-					
-			addField(javaFieldName, javaType);
-			
-			if (addSpecifyField)
-			{
-				addField(javaFieldName+"Specify", "String");
-			}		
+		if (!matched) {
+			ProcessorsImplement thing = (ProcessorsImplement) Class.forName("processors.fieldCreatedExtension.OtherUtil").newInstance();
+			thing.passInfo(fieldName, type, misc, this);
+			thing.PojoProcessorCommand();
 		}
 	}
 	
