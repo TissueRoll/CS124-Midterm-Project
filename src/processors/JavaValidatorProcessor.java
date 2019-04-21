@@ -96,7 +96,7 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 	
 	
 	@Override
-	public void fieldCreated(String fieldName, String type, String misc) {
+	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
 		
 		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);

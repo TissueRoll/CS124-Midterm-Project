@@ -1,18 +1,19 @@
 package processors.fieldCreatedExtension;
 
+import annotations.FieldCreatedIdentifier;
 import processors.*;
 
+@FieldCreatedIdentifier(identifier="MULTI:")
 public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 	
-	private String type;
-	private String misc;
-	private Object original;
+	public MultiUtil() {
+		
+	}
 	
-	public MultiUtil(String fieldName, String type, String misc, Object obj) {
-		super(fieldName, type, misc);
-		this.type = type;
-		this.misc = misc;
-		this.original = obj;
+	@Override
+	public void passInfo(String fieldName, String type, String misc, Object o) {
+		// TODO Auto-generated method stub
+		super.passInfo(fieldName, type, misc, o);
 	}
 
 	@Override
@@ -61,7 +62,8 @@ public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 	public void JsonTemplateProcessorCommand() {
 		// TODO Auto-generated method stub
 		JsonTemplateProcessor obj = (JsonTemplateProcessor) original;
-		/* has an error, since addSimpleField is private
+		/* CHANGE */
+		// wont work if methods needed below are protected/private
 		for (String name : options)
 		{
 			if (name.toLowerCase().contains("(specify)"))
@@ -74,14 +76,14 @@ public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 				obj.addSimpleField(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()), "CHECKBOX");
 			}
 		}
-		*/
 	}
 
 	@Override
 	public void PojoProcessorCommand() {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
-		/* has an error, since addField is private
+		/* CHANGE */
+		// wont work if methods needed below are protected/private
 		for (int i=0; i<options.length; i++)
 		{
 			String name = (String) options[i];
@@ -97,7 +99,6 @@ public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 				obj.addField(javaFieldName+NameUtils.toJavaFieldNameAppender(name.trim()), javaType);
 			}
 		}
-		*/
 	}
 
 }

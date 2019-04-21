@@ -1,20 +1,20 @@
 package processors.fieldCreatedExtension;
 
+import annotations.FieldCreatedIdentifier;
 import processors.*;
 
+@FieldCreatedIdentifier(identifier="OTHER")
 public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 	
-	private String fieldName;
-	private String type;
-	private String misc;
-	private Object original;
 	
-	public OtherUtil(String fieldName, String type, String misc, Object obj) {
-		super(fieldName, type, misc);
-		this.fieldName = fieldName;
-		this.type = type;
-		this.misc = misc;
-		this.original = obj;
+	public OtherUtil() {
+		
+	}
+	
+	@Override
+	public void passInfo(String fieldName, String type, String misc, Object o) {
+		// TODO Auto-generated method stub
+		super.passInfo(fieldName, type, misc, o);
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 		{
 			addSpecifyField = true;
 		}
-				
+		
 		obj.addSerialization(javaFieldName);
 		
 		if (addSpecifyField)
@@ -58,27 +58,29 @@ public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 	public void JsonTemplateProcessorCommand() {
 		// TODO Auto-generated method stub
 		JsonTemplateProcessor obj = (JsonTemplateProcessor) original;
-		/* has an error, since addSimpleField is private
 		boolean addSpecifyField = false;
+		/* CHANGE */
+		// wont work if methods needed below are protected/private
 		if (type.equals("CHECKBOX:SPECIFY"))
 		{
 			addSpecifyField = true;
 		}
 				
-		addSimpleField(javaFieldName, type);
+		obj.addSimpleField(javaFieldName, type);
 		
 		if (addSpecifyField)
 		{
-			addSimpleField(javaFieldName+"Specify", "STRING");				
+			obj.addSimpleField(javaFieldName+"Specify", "STRING");				
 		}
-		*/
+		
 	}
 
 	@Override
 	public void PojoProcessorCommand() {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
-		/* has an error, since addField is private
+		/* CHANGE */
+		// wont work if methods needed below are protected/private
 		String javaType = TypeUtils.getPojoType(type);
 			
 		boolean addSpecifyField = false;
@@ -87,13 +89,13 @@ public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 			addSpecifyField = true;
 		}
 				
-		addField(javaFieldName, javaType);
+		obj.addField(javaFieldName, javaType);
 		
 		if (addSpecifyField)
 		{
-			addField(javaFieldName+"Specify", "String");
+			obj.addField(javaFieldName+"Specify", "String");
 		}	
-		*/
+		
 	}
 
 }

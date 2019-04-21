@@ -1,20 +1,19 @@
 package processors.fieldCreatedExtension;
 
+import annotations.FieldCreatedIdentifier;
 import processors.*;
 
+@FieldCreatedIdentifier(identifier="SINGLE:")
 public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 	
-	private String fieldName;
-	private String type;
-	private String misc;
-	private Object original;
+	public SingleUtil() {
+		
+	}
 	
-	public SingleUtil(String fieldName, String type, String misc, Object obj) {
-		super(fieldName, type, misc);
-		this.fieldName = fieldName;
-		this.type = type;
-		this.misc = misc;
-		this.original = obj;
+	@Override
+	public void passInfo(String fieldName, String type, String misc, Object o) {
+		// TODO Auto-generated method stub
+		super.passInfo(fieldName, type, misc, o);
 	}
 
 	@Override
@@ -54,32 +53,33 @@ public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 	public void JsonTemplateProcessorCommand() {
 		// TODO Auto-generated method stub
 		JsonTemplateProcessor obj = (JsonTemplateProcessor) original;
-		/* has an error, since addSimpleField is private
-		addSimpleField(javaFieldName, type);
+		/* CHANGE */
+		// wont work if methods needed below are protected/private
+		obj.addSimpleField(javaFieldName, type);
 		for (int i=0; i< options.length; i++)
 		{
 			String option = options[i];
 			if (option.toLowerCase().contains("(specify"))
 			{
-				addSimpleField(javaFieldName+"Specify", "STRING");				
+				obj.addSimpleField(javaFieldName+"Specify", "STRING");				
 				break;  // assume only one Specify field per group
 			}					
 		}
-		*/
 	}
 
 	@Override
 	public void PojoProcessorCommand() {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
-		/* has an error, since addField is private
+		/* CHANGE */
+		// wont work if methods needed below are protected/private
 		String javaType = TypeUtils.getPojoType(type);
-		addField(javaFieldName, javaType);
+		obj.addField(javaFieldName, javaType);
 		if (type.contains("(Specify".toLowerCase()))
 		{
-			addField(javaFieldName+"Specify", "String");
+			obj.addField(javaFieldName+"Specify", "String");
 		}
-		*/
+		
 	}
 
 }

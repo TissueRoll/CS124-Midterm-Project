@@ -155,7 +155,7 @@ public class Parser
 		fieldListeners.add(fl);
 	}
 	
-	public void newFieldCreated(String line)
+	public void newFieldCreated(String line) throws Exception
 	{
 		String[] data = line.split(";");
 		

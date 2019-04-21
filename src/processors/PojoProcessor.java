@@ -31,7 +31,7 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 	
 	
 	@Override
-	public void fieldCreated(String fieldName, String type, String misc) {
+	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
 		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
 		
@@ -90,8 +90,10 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 			}		
 		}
 	}
-
-	private void addUnmappedField(String javaFieldName, String javaType, String init) {
+	
+	/* CHANGE */
+	// used to be private
+	public void addUnmappedField(String javaFieldName, String javaType, String init) {
 		addTabs();
 		
 		fieldBuffer.append("private ");
@@ -112,7 +114,9 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		addToString(javaFieldName, javaType);
 	}
 	
-	private void addUnmappedRealmList(String javaFieldName, String javaType, String containedType, String init) {
+	/* CHANGE */
+	// used to be private
+	public void addUnmappedRealmList(String javaFieldName, String javaType, String containedType, String init) {
 		fieldBuffer.append("\n");
 		addTabs();		
 		// if a list type add AutoMigration
@@ -137,9 +141,9 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		addToString(javaFieldName, javaType);
 	}
 
-	
-	
-	private void addField(String javaFieldName, String javaType) {
+	/* CHANGE */
+	// used to be private
+	public void addField(String javaFieldName, String javaType) {
 		addTabs();
 		fieldBuffer.append("private ");
 		fieldBuffer.append(javaType);

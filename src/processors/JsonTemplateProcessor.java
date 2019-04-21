@@ -28,7 +28,9 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		
 	}
 	
-	private String getSampleValue(String type)
+	/* CHANGE */
+	// used to be private
+	public String getSampleValue(String type)
 	{
 
 		String[] data = type.split(":");
@@ -74,7 +76,7 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 	
 	
 	@Override
-	public void fieldCreated(String fieldName, String type, String misc) {
+	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
 		String javaFieldName = ParseUtils.extractJavaFieldName(fieldName, misc);
 
@@ -142,8 +144,9 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		}	
 	}
 	
-
-	private void addSimpleField(String javaFieldName, String type) {
+	/* CHANGE */
+	// used to be private
+	public void addSimpleField(String javaFieldName, String type) {
 		// javaType just determines if value will have a ""
 		
 //		,"src_maternity_info": 0
@@ -199,7 +202,9 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		}
 	}
 	
-	private void addTabs(StringBuilder sb)
+	/* CHANGE */
+	// used to be private
+	public void addTabs(StringBuilder sb)
 	{
 		sb.append("\t\t");
 	}

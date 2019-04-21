@@ -49,8 +49,6 @@ public class NurseRegistrationJsonSerializer implements JsonSerializer<NurseRegi
 		serializeProfessionalStatus(model, object, context); // professional_status
 		serializeDesignation(model, object, context); // designation
 		serializeOffice(model, object, context); // office
-		serializeQualifications(model, object, context); // qualifications
-		serializeTrainings(model, object, context); // trainings
  
        
         return object;
@@ -180,16 +178,6 @@ public class NurseRegistrationJsonSerializer implements JsonSerializer<NurseRegi
     public void serializeOffice(NurseRegistration model, JsonObject object, JsonSerializationContext context)
     {
         object.add("office", context.serialize(model.getOffice()));
-    }
-
-    public void serializeQualifications(NurseRegistration model, JsonObject object, JsonSerializationContext context)
-    {
-        object.add("qualifications", context.serialize(model.getQualifications()));
-    }
-
-    public void serializeTrainings(NurseRegistration model, JsonObject object, JsonSerializationContext context)
-    {
-        object.add("trainings", context.serialize(model.getTrainings()));
     }
  
     
