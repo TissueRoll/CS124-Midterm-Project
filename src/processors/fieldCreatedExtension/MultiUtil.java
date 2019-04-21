@@ -1,9 +1,11 @@
 package processors.fieldCreatedExtension;
 
 import annotations.FieldCreatedIdentifier;
+import annotations.RefersTo;
 import processors.*;
 
 @FieldCreatedIdentifier(identifier="MULTI:")
+@RefersTo(target = {JavaSerializerProcessor.class,JavaValidatorProcessor.class,JsonTemplateProcessor.class,PojoProcessor.class})
 public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 	
 	public MultiUtil() {

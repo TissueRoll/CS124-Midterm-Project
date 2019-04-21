@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import annotations.Processor;
+import annotations.RefersTo;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import listeners.FieldListener;
@@ -29,7 +29,7 @@ public class Parser
 	{
 		dataFile = file;
 		ScanResult processors = new FastClasspathScanner("processors").scan();
-		List<String> allProcessors = processors.getNamesOfClassesWithAnnotation("annotations.Processor");
+		List<String> allProcessors = processors.getNamesOfClassesWithAnnotation("annotations.RefersTo");
 		for (String s : allProcessors) {
 			addListener(Class.forName(s).newInstance());
 		}

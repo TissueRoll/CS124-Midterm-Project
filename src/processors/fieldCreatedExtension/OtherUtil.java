@@ -1,9 +1,11 @@
 package processors.fieldCreatedExtension;
 
 import annotations.FieldCreatedIdentifier;
+import annotations.RefersTo;
 import processors.*;
 
 @FieldCreatedIdentifier(identifier="OTHER")
+@RefersTo(target = {JavaSerializerProcessor.class,JavaValidatorProcessor.class,JsonTemplateProcessor.class,PojoProcessor.class})
 public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 	
 	

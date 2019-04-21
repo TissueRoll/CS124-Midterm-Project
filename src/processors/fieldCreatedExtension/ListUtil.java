@@ -1,9 +1,11 @@
 package processors.fieldCreatedExtension;
 
 import annotations.FieldCreatedIdentifier;
+import annotations.RefersTo;
 import processors.*;
 
 @FieldCreatedIdentifier(identifier="LIST:")
+@RefersTo(target= {PojoProcessor.class})
 public class ListUtil extends GenericUtil implements ProcessorsImplement {
 	
 	public ListUtil() {

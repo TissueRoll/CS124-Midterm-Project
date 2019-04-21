@@ -1,28 +1,23 @@
 package processors;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
+import annotations.FieldCreatedIdentifier;
+import annotations.RefersTo;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
-import processors.fieldCreatedExtension.MultiUtil;
 import processors.fieldCreatedExtension.ProcessorsImplement;
-import annotations.FieldCreatedIdentifier;
-import annotations.Processor;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 
-@Processor(target= {ModelListener.class,FragmentListener.class,FieldListener.class,LabelListener.class})
+@RefersTo(target= {ModelListener.class,FragmentListener.class,FieldListener.class,LabelListener.class})
 public class JavaSerializerProcessor implements ModelListener, FragmentListener, FieldListener , LabelListener{
 
 	String modelName;
@@ -41,11 +36,22 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 	@Override
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
+		
 		ScanResult results = new FastClasspathScanner("processors.fieldCreatedExtension").scan();
 		List<String> allResults = results.getNamesOfClassesWithAnnotation(FieldCreatedIdentifier.class);
 		boolean matched = false;
 		for (String s : allResults) {
 			Class c = Class.forName(s);
+			RefersTo rt = (RefersTo) c.getAnnotation(RefersTo.class);
+			boolean isReferred = false;
+			for (Class referredClass : rt.target()) {
+				if (this.getClass().equals(referredClass)) {
+					isReferred = true;
+				}
+			}
+			if (!isReferred) {
+				continue;
+			}
 			FieldCreatedIdentifier fci = (FieldCreatedIdentifier) c.getAnnotation(FieldCreatedIdentifier.class);
 			if (type.startsWith(fci.identifier())) {
 				matched = true;

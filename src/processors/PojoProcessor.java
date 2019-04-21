@@ -11,9 +11,9 @@ import listeners.FieldListener;
 import listeners.FragmentListener;
 import listeners.LabelListener;
 import listeners.ModelListener;
-import annotations.Processor;
+import annotations.RefersTo;
 
-@Processor(target= {ModelListener.class,FragmentListener.class,FieldListener.class})
+@RefersTo(target= {ModelListener.class,FragmentListener.class,FieldListener.class})
 public class PojoProcessor implements ModelListener, FragmentListener, FieldListener {
 
 	String modelName;
