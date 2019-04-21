@@ -33,9 +33,6 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		
 	}
 	
-	
-	
-	
 	@Override
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
