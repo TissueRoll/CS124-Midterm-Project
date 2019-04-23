@@ -22,7 +22,6 @@ import processors.PojoProcessor;
 public class Parser 
 {
 	private String dataFile;
-	//ok
 	/*
 	 * constructor
 	 * calls add listener and passes each .*Processor class

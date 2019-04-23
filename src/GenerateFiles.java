@@ -12,7 +12,7 @@ public class GenerateFiles {
 		p = new Parser("input/StudentHealthAssessment.txt");
 		p.parse();
 		
-			p = new Parser("input/NurseRegistration.txt");
+		p = new Parser("input/NurseRegistration.txt");
 		p.parse();
 
 	}
