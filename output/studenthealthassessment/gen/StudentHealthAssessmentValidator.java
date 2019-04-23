@@ -176,6 +176,7 @@ public class StudentHealthAssessmentValidator extends BaseValidator implements V
 		validateRecentCounseling();
 		validateRecentCounselingSpecify();
 		validateBhSuspension();
+		validateBhSuspensionSpecify();
 		validateBhAntiSocialBehavior();
 		validateBhDelinquency();
 		validateBhViolence();
@@ -1080,6 +1081,12 @@ public class StudentHealthAssessmentValidator extends BaseValidator implements V
     {
     
         validateNonNullField(model.getBhSuspension(), activity.getPage("Page 3"), R.id.bhSuspensionContainer, context.getResources().getString(R.string.student_health_assessment_bhSuspension));
+    }
+
+    public void validateBhSuspensionSpecify()
+    {
+  
+        validateNonNullSpecifyField(model.getBhSuspension(),1,model.getBhSuspensionSpecify(), activity.getPage("Page 3"), R.id.bhSuspensionSpecifyContainer, context.getResources().getString(R.string.student_health_assessment_bhSuspensionSpecify));   
     }
 
     public void validateBhAntiSocialBehavior()

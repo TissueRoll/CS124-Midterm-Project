@@ -256,6 +256,7 @@ public class StudentHealthAssessment extends RealmObject implements EpinurseMode
 
 	// Page 3
 	private Integer bhSuspension;
+	private String bhSuspensionSpecify;
 	private Integer bhAntiSocialBehavior;
 	private Integer bhDelinquency;
 	private Integer bhViolence;
@@ -2571,6 +2572,21 @@ public class StudentHealthAssessment extends RealmObject implements EpinurseMode
 		this.bhSuspension = bhSuspension;
 	}
 
+	public String getBhSuspensionSpecify() {
+		return this.bhSuspensionSpecify;
+	}
+
+	public void setBhSuspensionSpecify(String bhSuspensionSpecify) {
+	
+		if (this.bhSuspensionSpecify==null || !this.bhSuspensionSpecify.equals(bhSuspensionSpecify))
+		{
+			editing = true;
+			synced = false;
+		}
+	
+		this.bhSuspensionSpecify = bhSuspensionSpecify;
+	}
+
 	public Integer getBhAntiSocialBehavior() {
 		return this.bhAntiSocialBehavior;
 	}
@@ -3212,6 +3228,7 @@ public class StudentHealthAssessment extends RealmObject implements EpinurseMode
 				", recentCounseling='" + recentCounseling + '\'' +
 				", recentCounselingSpecify='" + recentCounselingSpecify + '\'' +
 				", bhSuspension='" + bhSuspension + '\'' +
+				", bhSuspensionSpecify='" + bhSuspensionSpecify + '\'' +
 				", bhAntiSocialBehavior='" + bhAntiSocialBehavior + '\'' +
 				", bhDelinquency='" + bhDelinquency + '\'' +
 				", bhViolence='" + bhViolence + '\'' +

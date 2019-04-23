@@ -188,6 +188,7 @@ public class StudentHealthAssessmentJsonSerializer implements JsonSerializer<Stu
 
 		// Page 3
 		serializeBhSuspension(model, object, context); // bh_suspension
+		serializeBhSuspensionSpecify(model, object, context); // bh_suspension_specify
 		serializeBhAntiSocialBehavior(model, object, context); // bh_anti_social_behavior
 		serializeBhDelinquency(model, object, context); // bh_delinquency
 		serializeBhViolence(model, object, context); // bh_violence
@@ -984,6 +985,11 @@ public class StudentHealthAssessmentJsonSerializer implements JsonSerializer<Stu
     public void serializeBhSuspension(StudentHealthAssessment model, JsonObject object, JsonSerializationContext context)
     {
         object.add("bh_suspension", context.serialize(model.getBhSuspension()));
+    }
+
+    public void serializeBhSuspensionSpecify(StudentHealthAssessment model, JsonObject object, JsonSerializationContext context)
+    {
+        object.add("bh_suspension_specify", context.serialize(model.getBhSuspensionSpecify()));
     }
 
     public void serializeBhAntiSocialBehavior(StudentHealthAssessment model, JsonObject object, JsonSerializationContext context)

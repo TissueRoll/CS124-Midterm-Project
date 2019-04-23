@@ -182,6 +182,7 @@
 
 
 		,"bh_suspension":0
+		,"bh_suspension_specify":"text"
 		,"bh_anti_social_behavior":0
 		,"bh_delinquency":0
 		,"bh_violence":0
