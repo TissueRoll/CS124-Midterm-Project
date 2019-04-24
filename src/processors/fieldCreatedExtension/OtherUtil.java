@@ -61,8 +61,7 @@ public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 		// TODO Auto-generated method stub
 		JsonTemplateProcessor obj = (JsonTemplateProcessor) original;
 		boolean addSpecifyField = false;
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
+
 		if (type.equals("CHECKBOX:SPECIFY"))
 		{
 			addSpecifyField = true;
@@ -81,8 +80,7 @@ public class OtherUtil extends GenericUtil implements ProcessorsImplement {
 	public void PojoProcessorCommand() {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
+
 		String javaType = TypeUtils.getPojoType(type);
 			
 		boolean addSpecifyField = false;

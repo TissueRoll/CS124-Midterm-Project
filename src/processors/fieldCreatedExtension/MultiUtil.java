@@ -64,8 +64,7 @@ public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 	public void JsonTemplateProcessorCommand() {
 		// TODO Auto-generated method stub
 		JsonTemplateProcessor obj = (JsonTemplateProcessor) original;
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
+
 		for (String name : options)
 		{
 			if (name.toLowerCase().contains("(specify)"))
@@ -84,8 +83,7 @@ public class MultiUtil extends GenericUtil implements ProcessorsImplement {
 	public void PojoProcessorCommand() {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
+
 		for (int i=0; i<options.length; i++)
 		{
 			String name = (String) options[i];

@@ -34,8 +34,6 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		
 	}
 	
-	/* CHANGE */
-	// used to be private
 	public String getSampleValue(String type)
 	{
 
@@ -84,9 +82,7 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 	@Override
 	public void fieldCreated(String fieldName, String type, String misc) throws Exception {
 		// TODO Auto-generated method stub
-		
-		// check if the field is a meant for custom runtime serialization
-			// if it is, nothing is added at this point, just skip
+
 		if (ParseUtils.hasMisc("JSONCUSTOM", misc))
 		{
 			return;
@@ -99,19 +95,12 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		thing.JsonTemplateProcessorCommand();	
 	}
 	
-	/* CHANGE */
-	// used to be private
 	public void addSimpleField(String javaFieldName, String type) {
-		// javaType just determines if value will have a ""
-		
-//		,"src_maternity_info": 0
-//		,"child_name": "Name of child"
 		
 		String jsonKey = NameUtils.javaFieldNameToJson(javaFieldName);		
 		StringBuilder sb = fieldBuffer;
 
 		addTabs(sb);
-		// add key only if fresh
 		sb.append(",\""); 
 		sb.append(jsonKey);	
 		sb.append("\":");
@@ -137,9 +126,8 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 			String content = FileUtils.readFileToString(pojoTemplate, Charset.defaultCharset());
 			
 			
-			// update info
 			content = content.replaceAll("\\{\\$MODEL_NAME\\}", NameUtils.toClassName(modelName));
-				// {$FIELDS}
+
 			content = content.replaceAll("\\{\\$FIELDS\\}", fieldBuffer.toString());
 
 			File dir = new File("output/json");
@@ -157,8 +145,6 @@ public class JsonTemplateProcessor implements ModelListener, FragmentListener, F
 		}
 	}
 	
-	/* CHANGE */
-	// used to be private
 	public void addTabs(StringBuilder sb)
 	{
 		sb.append("\t\t");

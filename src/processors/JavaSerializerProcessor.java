@@ -111,15 +111,12 @@ public class JavaSerializerProcessor implements ModelListener, FragmentListener,
 	public void modelDone() {
 		// TODO Auto-generated method stub
 		
-		// save file
-
 		try
 		{
 			File template = new File("templates/serializer.txt");
 			String content = FileUtils.readFileToString(template, Charset.defaultCharset());
 			
 			
-			// update info
 			content = content.replaceAll("\\{\\$MODEL_PACKAGE\\}", NameUtils.toPackageName(modelName));
 			
 			content = content.replaceAll("\\{\\$MODEL_CLASS\\}", NameUtils.toClassName(modelName));

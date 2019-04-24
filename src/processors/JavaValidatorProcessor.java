@@ -45,10 +45,6 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 			String variable = ParseUtils.getMiscValue("DEPEND", misc);
 			String[] valuesForcingValidation = ParseUtils.getMiscParams("DEPEND", misc);
 			
-			// WARNING: for now we assume everything are Integers or Double
-			//			to do otherwise requires storing all the previous field information in the parser
-						
-			// WARNING: potential issue from fragment jumping (skipping pages), add null check first
 			try
 			{
 				File template = new File("templates/validationDependencyCheck.txt");
@@ -59,12 +55,10 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 				{
 					try
 					{
-						// just a number
 						conditions.add("model.get"+NameUtils.upcaseFirst(variable)+"()=="+Integer.parseInt(value));
 					}
 					catch(Exception e)
 					{
-						// expression fragment
 						conditions.add("model.get"+NameUtils.upcaseFirst(variable)+"()"+value);
 					}
 				}
@@ -150,15 +144,7 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 		{
 			File template = new File("templates/validatorMethod.txt");
 			String content = FileUtils.readFileToString(template, Charset.defaultCharset());
-			
-			
-			// dependency override?
-			// add check for depends
-						// if field is dependent on another model value
-						// check if if that value meets specified criteria
-						// if it does, then it is required (proceed)
-						// otherwise return from the method
-					
+								
 			content = content.replaceAll("\\{\\$DEPENDENCY_CHECK\\}", dependencyCheck);
 			
 			
@@ -233,16 +219,13 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 	@Override
 	public void modelDone() {
 		// TODO Auto-generated method stub
-		
-		// save file
 
 		try
 		{
 			File template = new File("templates/validator.txt");
 			String content = FileUtils.readFileToString(template, Charset.defaultCharset());
 			
-			
-			// update info
+
 			content = content.replaceAll("\\{\\$MODEL_PACKAGE\\}", NameUtils.toPackageName(modelName));
 			
 			content = content.replaceAll("\\{\\$MODEL_CLASS\\}", NameUtils.toClassName(modelName));
@@ -282,7 +265,6 @@ public class JavaValidatorProcessor implements ModelListener, FragmentListener, 
 				return "\""+s+"\"";
 			}
 			
-			// based on model
 			String value = "context.getResources().getString(R.string."+NameUtils.toLayoutName(modelName)+"_"+key+")";
 			return value;
 		}

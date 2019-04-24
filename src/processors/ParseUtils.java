@@ -27,9 +27,6 @@ public class ParseUtils
 	
 	public static String getMiscValue(String key, String misc)
 	{
-		// split according to ,
-		// split according to :
-		// split according to {} ??
 		if (misc==null)
 		{
 			return null;
@@ -42,17 +39,12 @@ public class ParseUtils
 			{
 				return entry.split(":")[1].trim();
 			}
-		}
-		
-		return null;
-				
+		}		
+		return null;				
 	}
 	
 	public static String[] getMiscParams(String key, String misc)
 	{
-		// split according to ,
-		// split according to :
-		// split according to {} ??
 		if (misc==null)
 		{
 			return null;
@@ -72,18 +64,12 @@ public class ParseUtils
 				params = params.substring(1, params.length()-1);
 				return params.split(",");
 			}
-		}
-		
-		return null;
-				
+		}		
+		return null;				
 	}
 	
 	public static boolean hasMisc(String key, String misc)
-	{
-		// split according to ,
-		// split according to :
-		// split according to {} ??
-		
+	{		
 		if (misc == null) return false;
 		
 		String[] entries = misc.split("\\|");
@@ -93,10 +79,8 @@ public class ParseUtils
 			{
 				return true;
 			}
-		}
-		
-		return false;
-				
+		}		
+		return false;				
 	}	
 	
 	
@@ -104,7 +88,6 @@ public class ParseUtils
 	{
 		String javaFieldName;
 		
-		// check if name starts with @drawable/
 		if (fieldName.startsWith("@drawable/"))
 		{
 			if (hasMisc("FIELDNAME", misc))
@@ -138,7 +121,5 @@ public class ParseUtils
 			}
 		}
 		return javaFieldName;
-	}
-	
-	
+	}	
 }

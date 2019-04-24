@@ -1,12 +1,6 @@
 package processors;
 
 public class TypeUtils {
-
-	// TODO:
-	// need a method that generates code that applies a getter from a model and properly converts
-	// that value to the UI widget, e.g setText(), setSelected(), setChecked(), etc
-	// and reverse operation
-	
 	
 	public static String getPojoType(String s)
 	{

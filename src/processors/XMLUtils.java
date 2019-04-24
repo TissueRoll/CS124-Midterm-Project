@@ -55,7 +55,6 @@ public class XMLUtils {
 				fileName = "date.txt";
 				break;
 			case "STRING": 
-//				fileName = "textinput.txt";
 				fileName = "textinput2.txt";
 				break;
 				

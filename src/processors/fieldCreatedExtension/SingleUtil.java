@@ -29,7 +29,7 @@ public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 			if (option.toLowerCase().contains("(specify"))
 			{
 				obj.addSerialization(javaFieldName+"Specify");				
-				break;  // assume only one Specify field per group
+				break;  
 			}					
 		}
 	}
@@ -46,7 +46,7 @@ public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 			if (option.toLowerCase().contains("(specify"))
 			{
 				obj.addSpecifyValidation(javaFieldName+"Specify", javaFieldName, i, fieldName+" "+option, dependencyCheck);				
-				break;  // assume only one Specify field per group
+				break;  
 			}					
 		}
 	}
@@ -55,8 +55,7 @@ public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 	public void JsonTemplateProcessorCommand() {
 		// TODO Auto-generated method stub
 		JsonTemplateProcessor obj = (JsonTemplateProcessor) original;
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
+
 		obj.addSimpleField(javaFieldName, type);
 		for (int i=0; i< options.length; i++)
 		{
@@ -64,7 +63,7 @@ public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 			if (option.toLowerCase().contains("(specify"))
 			{
 				obj.addSimpleField(javaFieldName+"Specify", "STRING");				
-				break;  // assume only one Specify field per group
+				break; 
 			}					
 		}
 	}
@@ -73,8 +72,7 @@ public class SingleUtil extends GenericUtil implements ProcessorsImplement {
 	public void PojoProcessorCommand() {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
+
 		String javaType = TypeUtils.getPojoType(type);
 		obj.addField(javaFieldName, javaType);
 		if (type.contains("(Specify".toLowerCase()))

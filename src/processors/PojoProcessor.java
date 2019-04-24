@@ -42,8 +42,6 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		thing.PojoProcessorCommand();	
 	}
 	
-	/* CHANGE */
-	// used to be private
 	public void addUnmappedField(String javaFieldName, String javaType, String init) {
 		addTabs();
 		
@@ -59,18 +57,15 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		}
 		
 		fieldBuffer.append(";\n");
-		
-		
+				
 		addAccessors(javaFieldName, javaType);
 		addToString(javaFieldName, javaType);
 	}
 	
-	/* CHANGE */
-	// used to be private
 	public void addUnmappedRealmList(String javaFieldName, String javaType, String containedType, String init) {
 		fieldBuffer.append("\n");
 		addTabs();		
-		// if a list type add AutoMigration
+
 		fieldBuffer.append("@AutoMigration.MigratedList(listType = "+containedType+".class)\n");
 
 		addTabs();		
@@ -86,14 +81,11 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		}
 		
 		fieldBuffer.append(";\n");
-		
-		
+				
 		addAccessors(javaFieldName, javaType);
 		addToString(javaFieldName, javaType);
 	}
 
-	/* CHANGE */
-	// used to be private
 	public void addField(String javaFieldName, String javaType) {
 		addTabs();
 		fieldBuffer.append("private ");
@@ -101,8 +93,7 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 		fieldBuffer.append(" ");
 		fieldBuffer.append(javaFieldName);
 		fieldBuffer.append(";\n");
-		
-		
+				
 		addAccessors(javaFieldName, javaType);
 		addToString(javaFieldName, javaType);
 	}
@@ -111,7 +102,6 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 	{
 		try
 		{
-			// add accessors
 			File getsetTemplate = new File("templates/getset.txt");
 			String content = FileUtils.readFileToString(getsetTemplate, Charset.defaultCharset());
 		
@@ -119,9 +109,7 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 			content = content.replaceAll("\\{\\$FIELD_NAME\\}", javaFieldName);
 			content = content.replaceAll("\\{\\$TYPE\\}", javaType);
 
-			getSetBuffer.append(content);	
-			
-			
+			getSetBuffer.append(content);		
 		}
 		catch(Exception e)
 		{
@@ -133,7 +121,6 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 	{
 		try
 		{
-			// add tostring
 			File getsetTemplate = new File("templates/tostring.txt");
 			String content = FileUtils.readFileToString(getsetTemplate, Charset.defaultCharset());
 		
@@ -151,7 +138,6 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 	@Override
 	public void fieldDone() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -167,7 +153,6 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 	@Override
 	public void fragmentDone() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -184,14 +169,10 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 			File pojoTemplate = new File("templates/pojo.txt");
 			String content = FileUtils.readFileToString(pojoTemplate, Charset.defaultCharset());
 			
-			
-			// update info
-				// {$MODEL_PACKAGE}
-			
 			content = content.replaceAll("\\{\\$MODEL_PACKAGE\\}", NameUtils.toPackageName(modelName));
-				// {$MODEL_NAME}
+				
 			content = content.replaceAll("\\{\\$MODEL_NAME\\}", NameUtils.toClassName(modelName));
-				// {$FIELDS}
+				
 			content = content.replaceAll("\\{\\$FIELDS\\}", fieldBuffer.toString());
 			
 			content = content.replaceAll("\\{\\$GETSET\\}", getSetBuffer.toString());
@@ -204,8 +185,7 @@ public class PojoProcessor implements ModelListener, FragmentListener, FieldList
 			File output = new File(dir, NameUtils.toClassName(modelName)+".java");
 			FileWriter fw = new FileWriter(output);
 			fw.write(content, 0, content.length());
-			fw.close();
-		
+			fw.close();		
 		}
 		catch(Exception e)
 		{

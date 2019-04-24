@@ -58,19 +58,13 @@ public class NameUtils
     	 temp = stripRegExChars(temp);
     	 
     	 temp = temp.replaceAll("_", " ");
-    	 temp = temp.replaceAll("@drawable", "");
-
-    	 // if @drawable/ is present remove it
-    	 
+    	 temp = temp.replaceAll("@drawable", "");    	 
     	 
     	 temp = toCamelCase(temp);
     	 temp = temp.substring(0, 1).toLowerCase()+temp.substring(1);
-
-    	 // WARNING REALM HAS A COLUMN NAME LIMIT 57 utf8 chars
     	 
 		if (temp.length()>20)
 		{
-				 //temp = temp.substring(0,20);
 				 System.out.println("WARNING LONG NAME: "+temp);
 				 try
 				 {
@@ -80,9 +74,7 @@ public class NameUtils
 				 {
 					 e.printStackTrace();
 				 }
-		}    	 
-    	 
-    	 
+		}    	  	    	 
     	 return temp;
      }
 
@@ -99,9 +91,7 @@ public class NameUtils
      
      public static String toJavaFieldNameAppender(String temp)
      {
-    	 
-    	 // if prefix is present just use that
-		int alias = temp.indexOf("|");
+    	 int alias = temp.indexOf("|");
 		if (alias>-1)
 		{
 			return NameUtils.upcaseFirst(temp.substring(0, alias).trim());				
@@ -112,10 +102,7 @@ public class NameUtils
 		 
 	   	 temp = temp.replaceAll("_", " ");
 	   	 temp = temp.replaceAll("@drawable", "");
-	
-
-    	 // if @drawable/ is present remove it
-    	 
+	    	 
     	 temp = toCamelCase(temp);
     	 
     	 return temp;     

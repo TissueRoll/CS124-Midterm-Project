@@ -44,8 +44,6 @@ public class ListUtil extends GenericUtil implements ProcessorsImplement {
 		// TODO Auto-generated method stub
 		PojoProcessor obj = (PojoProcessor) original;
 		String[] listData = type.split(":");
-		/* CHANGE */
-		// wont work if methods needed below are protected/private
 		obj.addUnmappedRealmList(javaFieldName, "io.realm.RealmList<"+listData[1]+">",listData[1], "new io.realm.RealmList<"+listData[1]+">()");
 		
 	}
